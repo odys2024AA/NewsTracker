@@ -10,11 +10,21 @@
 
 <div class="example-wrapper">
     <h1>Hello {{ controller_name }}! ✅</h1>
+    {% if app.user %}
+        <a href="{{ path('app_logout') }}" class="px-4 py-1 m-2 bg-red-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+            Logout
+        </a>
+        <a href="{{ path('app_usercrud_edit', {'id': app.user.id }) }}" class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+            Update
+        </a>
+        <form method="post" action="{{ path('app_usercrud_delete', {'id': app.user.id}) }}" onsubmit="return confirm('Are you sure you want to delete your account?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
+            <button class="px-4 py-1 m-2 bg-red-800 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+                Delete
+            </button>
+        </form>
+    {% endif %}
 
-    This friendly message is coming from:
-    <ul class="text-amber-600">
-        <li>Your controller at <code>D:/Symfony_PHP_Study/news_tracker/src/Controller/WatchlistAnalysisController.php</code></li>
-        <li>Your template at <code>D:/Symfony_PHP_Study/news_tracker/templates/watchlist_analysis/index.html.twig</code></li>
-    </ul>
+    
 </div>
 {% endblock %}

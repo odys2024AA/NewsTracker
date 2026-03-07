@@ -12,6 +12,10 @@
         {% block javascripts %}
             {{ importmap('app') }}
         {% endblock %}
+
+        {% block importmap %}
+            {{ importmap('app') }}
+        {% endblock %}
     </head>
     <body>
         <div class="bg-gray-300 flex flex-col justify-center items-center h-screen w-screen">
