@@ -6,5 +6,7 @@
  * which should already be in your base.html.twig.
  */
 import './styles/app.css';
+import '@hotwired/turbo'; 
+import './stimulus_bootstrap.js';
 
 console.log('Tailwind is taking over! 🚀');

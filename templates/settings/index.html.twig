@@ -1,0 +1,25 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello SettingsController!{% endblock %}
+
+{% block body %}
+    <h1> Set up your profile and page settings</h1>
+
+    <a href="{{ path('app_watchlist') }}" class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+        Back
+    </a>
+    {% if app.user %}
+        <a href="{{ path('app_usercrud_edit', {'id': app.user.id }) }}" class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+            Edit
+        </a>
+        <form method="post" action="{{ path('app_usercrud_delete', {'id': app.user.id}) }}" onsubmit="return confirm('Are you sure you want to delete your account?');">
+            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ app.user.id) }}">
+            <button class="px-4 py-1 m-2 bg-red-800 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+                Delete
+            </button>
+        </form>
+        <a href="{{ path('app_logout') }}" class="px-4 py-1 m-2 bg-red-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+            Logout
+        </a>
+    {% endif %}
+{% endblock %}

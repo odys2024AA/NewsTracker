@@ -1,0 +1,10 @@
+<turbo-frame id="news-frame">
+    {% if news %}
+        <ul>
+            {% for article in news %}
+            <li> {{ article.title }}</li>
+            {% endfor %}
+        </ul>
+
+    {% endif %}     
+</turbo-frame>
