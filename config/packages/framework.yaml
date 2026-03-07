@@ -3,7 +3,16 @@ framework:
     secret: '%env(APP_SECRET)%'
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        # Enables session support
+        enabled: true
+        # Use the default PHP session storage
+        handler_id: null
+        # Ensures cookies are only sent over HTTPS (auto will detect if you're on 127.0.0.1)
+        cookie_secure: auto
+        cookie_samesite: lax
+        # Native storage is faster and more reliable for basic setups
+        storage_factory_id: session.storage.factory.native
 
     #esi: true
     #fragments: true
