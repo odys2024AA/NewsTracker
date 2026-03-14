@@ -4,7 +4,7 @@ namespace App\Service;
 
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
-class APIRequestService{
+class LLMRequestService{
 
     private HttpClientInterface $client;
     private string $baseUrl;
@@ -20,7 +20,9 @@ class APIRequestService{
         $url = $this->baseUrl . '/' . ltrim($endpoint, '/');
         
         if($this->apiKey){
-            $options['query']['apikey'] = $this->apiKey;
+            $options['headers']['x-goog-api-key'] = $this->apiKey;
+            $options['headers']['Content-Type'] ??= 'application/json';
+
         }
 
         $options['timeout'] ??= 10;
@@ -30,12 +32,13 @@ class APIRequestService{
         return $response->toArray();
     }
 
-    public function get(string $endpoint, array $query = []): array {
+
+    public function post(string $endpoint, array $data = []): array{
         return $this->request(
-            'GET',
+            'POST',
             $endpoint,
             [
-                'query' => $query,
+                'json' => $data
             ]
         );
     }

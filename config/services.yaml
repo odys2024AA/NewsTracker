@@ -17,12 +17,12 @@ services:
         resource: '../src/'
 
     finance.api:
-        class: App\Service\APIRequestService
+        class: App\Service\FMPRequestService
         arguments:
             $baseUrl: '%env(FMP_URL)%'
             $apiKey: '%env(FMP_KEY)%'
     llm.api:
-        class: App\Service\APIRequestService
+        class: App\Service\LLMRequestService
         arguments:
             $baseUrl: '%env(LLM_URL)%'
             $apiKey: '%env(LLM_KEY)%'
