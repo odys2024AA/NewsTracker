@@ -1,0 +1,51 @@
+<turbo-frame id="news-frame">
+
+    <div 
+        data-controller="news-bridge"
+        data-news-bridge-news-value="{{ news|json_encode }}">
+        <div class="flex flex-row justify-center">
+            <a 
+                href="{{ path('app_news_frame') }}" 
+                class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+                Refresh
+            </a>
+            <a 
+                href="{{ path('app_news_frame') }}" 
+                data-action="click->news-bridge#processStoredData"
+                class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+                Übersetzen
+            </a>
+
+        </div>
+    
+
+        {% if news %}
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 m-5 p-4">
+                {% for article in news %}
+                    <a href="{{ article.url }}" class="flex flex-row bg-black border border-gray-200 rounded-lg shadow-sm overflow-hidden h-48 text-gray-200">
+                        <div>
+                            <img src="{{ article.image }}" alt="No image found" class="w-full h-full object-cover">
+                        </div>
+                        
+                        <div class="flex flex-col justify-between items-start w-2/3 p-2">
+                            <div class=" line-clamp-2 ">
+                                <p class="text-lg font-bold"> {{ article.title }} </p>
+                            </div>
+                            <div class="max-h-20 overflow-y-auto scrollbar-hide custom-scrollbar">
+                                <p class=" text-sm">{{ article.text }}</p>
+                            </div>
+                            <div class="flex flex-row justify-between text-xs w-full">
+                                <p>{{ article.site }}</p>
+                                <p>{{ article.publishedDate }}</p>
+                            </div>
+                        </div>
+                    </a>
+                {% endfor %}
+            </div>
+
+        {% endif %}     
+
+    </div>
+
+</turbo-frame>

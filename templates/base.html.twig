@@ -13,12 +13,9 @@
             {{ importmap('app') }}
         {% endblock %}
 
-        {% block importmap %}
-            {{ importmap('app') }}
-        {% endblock %}
     </head>
-    <body>
-        <div class="bg-gray-300 flex flex-col justify-center items-center h-screen w-screen">
+    <body class="h-screen w-screen">
+        <div class="bg-black min-h-screen w-full text-gray-200">
             {% block body %}{% endblock %}
         </div>
         

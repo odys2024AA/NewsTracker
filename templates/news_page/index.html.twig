@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello NewsPageController!{% endblock %}
+
+{% block body %}
+    <h1> Current financial News</h1>
+
+    <turbo-frame id="news-frame" src="{{ path('app_news_frame') }}">
+        <div class="p-4">
+            <p>Loading latest news...</p>
+        </div>        
+    </turbo-frame>
+
+
+    <a href="{{ path('app_watchlist') }}" class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
+        Back
+    </a>
+
+{% endblock %}

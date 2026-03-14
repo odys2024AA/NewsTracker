@@ -1,1 +1,10 @@
 @import "tailwindcss";
+
+.custom-scrollbar {
+    scrollbar-width: thin;
+    scrollbar-color: #434952 transparent;
+}
+
+.btn {
+    @apply px-4 py-1 m-2 bg-purple-700 font-bold text-gray-100 shadow-gray-900 shadow-sm rounded-2xl
+}
