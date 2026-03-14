@@ -14,10 +14,13 @@
         {% endblock %}
 
     </head>
-    <body class="h-screen w-screen">
-        <div class="bg-black min-h-screen w-full text-gray-200">
+    <body class="bg-bgdefault min-h-screen text-textcustom">
+            <div class="">
+                <button data-controller="theme" data-action="click->theme#toggle">
+                    Switch Theme
+                </button>
+            </div>
             {% block body %}{% endblock %}
-        </div>
         
     </body>
 </html>

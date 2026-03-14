@@ -3,14 +3,16 @@
 {% block title %}Watchtower{% endblock %}
 
 {% block body %}
-    <h2 class="text-2xl text-purple-600">Welcome to our Application to check your Watchlist</h2>
 
-    <a href="{{ path('app_login') }}" class="px-4 py-1 m-2 bg-blue-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
-        Login
-    </a>
-    <a href="{{ path('app_register') }}" class="px-4 py-1 m-2 bg-purple-400 font-bold text-gray-100 shadow-gray-900 shadow-sm">
-        Register
-    </a>
+    <div class="core">
+        <h1>Welcome to our Application </h1>
+
+        <a href="{{ path('app_login') }}" class="btn my-2">
+            Login
+        </a>
+        <a href="{{ path('app_register') }}" class="btn my-2">
+            Register
+        </a>    
 
     </div>
 {% endblock %}

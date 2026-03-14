@@ -30,7 +30,7 @@ final class NewsPageController extends AbstractController
        if ($request->isMethod('POST')) {
             try {
                 $originalNewsData = $request->toArray();
-                $batch = $originalNewsData; //array_slice($originalNewsData, 0, 5);
+                $batch = array_slice($originalNewsData, 0, 5); //$originalNewsData; //array_slice($originalNewsData, 0, 5);
 
                 foreach ($batch as &$article) {
                     $article['title'] = $this->translate($client, $article['title']);

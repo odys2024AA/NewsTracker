@@ -27,23 +27,19 @@ class UserType extends AbstractType
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'type' => PasswordType::class,
+                'required' => false,
                 'mapped' => false,
                 'first_options' => [
                     'label' => 'Password',
-                    'required' => true,
                 ],
                 'second_options' => [
                     'label' => 'Password repeated',
-                    'required' => true,
                 ],
                 'invalid_message' => 'The password fields must match.',
                 'options' => [
                     'attr' => ['autocomplete' => 'new-password'],
                 ],                
                 'constraints' => [
-                    new NotBlank(
-                        message: 'Please enter a password',
-                    ),
                     new Length(
                         min: 6,
                         minMessage: 'Your password should be at least {{ limit }} characters',
