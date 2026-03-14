@@ -3,11 +3,51 @@
 {% block title %}Edit User{% endblock %}
 
 {% block body %}
-    <h1>Edit User</h1>
+    <div class="core">
+         <h1>Edit User</h1>
 
-    {{ include('usercrud/_form.html.twig', {'button_label': 'Update'}) }}
+        <div class="flex flex-col">
+            {{ form_start(form) }}
+                <div class="formfield">
+                    {{ form_row(form.email, {
+                        label_attr: { class: 'formlabel block ' },
+                        attr: {class: 'inputfield w-[25ch]'}
+                    }) }}
+                </div>
 
-    <a href="{{ path('app_usercrud_index') }}">back to list</a>
+                <div class="formfield">
+                    {{ form_row(form.plainPassword.first, {
+                        label: 'Password',
+                        label_attr: { class: 'formlabel mt-4 block' },
+                        attr: { class: 'inputfield w-[25ch]' }
+                    }) }}
 
-    {{ include('usercrud/_delete_form.html.twig') }}
+                    {{ form_row(form.plainPassword.second, {
+                        label: 'Repeat Password',
+                        label_attr: { class: 'formlabel mt-4 block' },
+                        attr: { class: 'inputfield w-[25ch]' }
+                    }) }}
+                </div>
+
+                {{ form_widget(form._token) }}
+                
+                <button type="submit" class="btn">Update</button>
+            {{ form_end(form, { render_rest: false}) }}
+
+        </div>
+
+        <div class="flex flex-row">
+            <a href="{{ path('app_watchlist') }}" class="my-2 btn">
+                Back
+            </a>
+
+            <div class="">
+                {{ include('usercrud/_delete_form.html.twig') }}
+            </div>
+        </div>
+
+        
+        
+    </div>
+   
 {% endblock %}

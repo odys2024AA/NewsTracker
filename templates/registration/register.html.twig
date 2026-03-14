@@ -3,20 +3,46 @@
 {% block title %}Register{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+    <div class="core">
+        <h1>Register</h1>
 
-    {{ form_errors(registrationForm) }}
+        {% if form_errors(registrationForm) %}
+            <div class="mb-3">
+                {{ form_errors(registrationForm) }}
+            </div>
+        {% endif %}
 
-    <div>
-        {{ form_start(registrationForm) }}
-            {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.plainPassword, {
-                label: 'Password'
-            }) }}
-            <button type="submit" class="btn">Register</button>
-        {{ form_end(registrationForm) }}
+        <div class="forminput">
+            {{ form_start(registrationForm) }}
+                <div class="forminput">
+                    {{ form_row(registrationForm.email, {
+                        label_attr: { class: 'formlabel block ' },
+                        attr: {class: 'inputfield w-[25ch]'}
+                    }) }}
+                </div>
 
+                <div class="formfield">
+                    {{ form_row(registrationForm.plainPassword.first, {
+                        label: 'Password',
+                        label_attr: { class: 'formlabel mt-4 block' },
+                        attr: { class: 'inputfield w-[25ch]' }
+                    }) }}
+
+                    {{ form_row(registrationForm.plainPassword.second, {
+                        label: 'Repeat Password',
+                        label_attr: { class: 'formlabel mt-4 block' },
+                        attr: { class: 'inputfield w-[25ch]' }
+                    }) }}
+                </div>
+                
+                <button type="submit" class="btn">Register</button>
+            {{ form_end(registrationForm) }}
+
+        </div>
+        
     </div>
+    
+    
 
     
 {% endblock %}
