@@ -7,8 +7,32 @@
     <div class="core">
         <h1>Welcome to your Watchlist</h1>
 
+        {% include 'watchlist_analysis/_form_add_asset.html.twig' %}
+
         <div class="my-6">
-            I identify as a table
+            <table class="watchlist-table">
+                <thead>
+                    <tr>
+                        <th>Symbol</th>
+                        <th>Name</th>
+                        <th>Quote</th>
+                        <th>Change</th>
+                    </tr> 
+                </thead>
+                <tbody id="watchlist-tablebody">
+                    {% for asset in watchlist %}
+                        {% include 'watchlist_analysis/_table_row.html.twig' with { 'asset': asset } %}
+                    {% else %}
+                    <tr id="watchlist-empty-message">
+                        <td colspan="4" class="text-center py-8 opacity-50">
+                            No assets in your watchlist yet.
+                        </td>
+                    </tr>
+                    {% endfor %}
+
+                </tbody>
+            </table>
+            
         </div>
 
         <div class="my-6">

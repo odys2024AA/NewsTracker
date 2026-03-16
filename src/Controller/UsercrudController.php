@@ -49,16 +49,24 @@ final class UsercrudController extends AbstractController
     public function delete(Request $request, User $user, EntityManagerInterface $entityManager): Response
     {
         $this->denyAccessUnlessGranted('USER_DELETE', $user);
+        $submittedToken = $request->request->get('_token');
 
-        if ($this->isCsrfTokenValid('delete'.$user->getId(), $request->getPayload()->getString('_token'))) {
+        if ($this->isCsrfTokenValid('delete'.$user->getId(), $submittedToken)) {
             $entityManager->remove($user);
             $entityManager->flush();
+
+            $this->addFlash('success', 'Usr deleted successfully');
+
+            // Logout after deletion
+            if($this->getUser() === $user){
+                $request->getSession()->invalidate();
+                $this->container->get('security.token_storage')->setToken(null);
+                return $this->redirectToRoute('app_login');
+            }
+        } else {
+            $this->addFlash('error', 'Invalid security token');
         }
 
-        // Log out the user if they deleted themselves
-        $request->getSession()->invalidate();
-        $this->container->get('security.token_storage')->setToken(null);
-
-        return $this->redirectToRoute('app_usercrud_index', [], Response::HTTP_SEE_OTHER);
+        return $this->redirectToRoute('app_usercrud_index');
     }
 }
