@@ -44,7 +44,6 @@ security:
         - { path: ^/login, roles: PUBLIC_ACCESS }
         - { path: ^/register, roles: PUBLIC_ACCESS }
         - { path: ^/$, roles: PUBLIC_ACCESS }
-        - { path: ^/user, roles: ROLE_USER }
         
         # Everything else requires being logged in
         - { path: ^/, roles: ROLE_USER }
