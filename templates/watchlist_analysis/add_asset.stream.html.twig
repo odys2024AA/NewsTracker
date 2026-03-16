@@ -1,0 +1,16 @@
+{# 1. Append the new row to the table body #}
+<turbo-stream action="append" target="watchlist-tablebody">
+    <template>
+        {% include 'watchlist_analysis/_table_row.html.twig' with { 'asset': asset} %}
+    </template>
+</turbo-stream>
+
+{# 2. Reset form #}
+<turbo-stream action="replace" target="watchlist-form">
+    <template>
+        {% include 'watchlist_analysis/_form_add_asset.html.twig' %}
+    </template>
+</turbo-stream>
+
+{# 3. Reset empty messages #}
+<turbo-stream action="remove" target="watchlist-empty-message"></turbo-stream>

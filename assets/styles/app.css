@@ -12,9 +12,10 @@
     --color-greencustom: #16a34a;
     --color-textcustom: #000000;
     --color-textfields: #000000;
+    --color-texttableheader: #f3d5ff;
     --background-image-main-gradient: linear-gradient(135deg, #80339c, #9f26cb);
-    --color-neutral-tertiary: #39313c;
-    --color-neutral-tertiary: #4e4553;
+    --color-neutral-primary: #39313c;
+    --color-neutral-secondary: #4e4553;
     --color-neutral-tertiary: #645a6a;
 }
 
@@ -30,7 +31,8 @@
     --color-redcustom: #ff7c92;
     --color-textcustom: #645a6a;
     --color-textfields: #ffffff;
-    --color-neutral-tertiary: #645a6a;
+    --color-texttableheader: #645a6a;
+    --color-neutral-primary: #645a6a;
     --color-neutral-tertiary: #39313c;
 } 
 
@@ -40,36 +42,68 @@
     }
 }
 
-.core {
-    @apply flex flex-col justify-center items-center min-h-screen;
-}
+@layer components {
+    .core {
+        @apply flex flex-col justify-center items-center min-h-screen;
+    }
 
-.custom-scrollbar {
-    scrollbar-width: thin;
-    scrollbar-color: #434952 transparent;
-}
+    .custom-scrollbar {
+        scrollbar-width: thin;
+        scrollbar-color: #434952 transparent;
+    }
 
-.btn {
-    @apply px-4 py-1 m-2 bg-main-gradient font-bold text-white text-xl rounded-xl;
-}
+    .btn {
+        @apply px-4 py-1 m-2 bg-main-gradient font-bold text-white text-xl rounded-xl;
+    }
 
 
-.forminput {
-    @apply flex flex-col;
-}
+    .forminput {
+        @apply flex flex-col;
+    }
 
-.formlabel {
-    @apply text-textcustom mb-1 text-sm;
-}
+    .formlabel {
+        @apply text-textcustom mb-1 text-sm;
+    }
 
-.inputfield {
-    @apply border-neutral-tertiary border-2 bg-bgdefault rounded-xl px-4 py-2 text-textfields;
-}
+    .inputfield {
+        @apply border-neutral-tertiary border-2 bg-bgdefault rounded-xl px-4 py-2 text-textfields;
+    }
 
-.tilebox {
-    border: 2px solid transparent;
-    background: 
-        linear-gradient(var(--color-surface), var(--color-surface)) padding-box, /* Inner color */
-        linear-gradient(150deg, var(--color-accent1) 30%, var(--color-surface) 40%) border-box; /* Gradient color */
-    @apply rounded-2xl text-textfields;
+    .tilebox {
+        border: 2px solid transparent;
+        background: 
+            linear-gradient(var(--color-surface), var(--color-surface)) padding-box, /* Inner color */
+            linear-gradient(150deg, var(--color-accent1) 30%, var(--color-surface) 40%) border-box; /* Gradient color */
+        @apply rounded-2xl text-textfields;
+    }
+
+    .watchlist-table {
+        @apply w-full border-collapse overflow-hidden rounded-sm;
+        
+        & thead {
+            @apply bg-accent2 text-texttableheader uppercase tracking-wider;
+            & th {
+                @apply px-6 py-4 font-bold;
+            }
+        }
+
+        & tbody {
+            & tr {
+                @apply border-b border-neutral-tertiary/20 last:border-0 transition-colors hover:bg-accent1/10;
+                background-color: var(--color-surface);
+            }
+            
+            & td {
+                @apply px-6 py-4 text-sm text-textfields text-center;
+            }
+        }
+    }
+    .watchlist-table tbody td.price-positive {
+        color: var(--color-greencustom);
+    }
+    .watchlist-table tbody td.price-negative {
+        color: var(--color-redcustom);
+    }
+
+
 }

@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -33,6 +35,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column]
     private ?string $password = null;
+
+    /**
+     * @var Collection<int, WatchlistAsset>
+     */
+    #[ORM\ManyToMany(targetEntity: WatchlistAsset::class, mappedBy: 'appUsers')]
+    private Collection $watchlistAssets;
+
+    public function __construct()
+    {
+        $this->watchlistAssets = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -113,5 +126,32 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function eraseCredentials(): void
     {
         // @deprecated, to be removed when upgrading to Symfony 8
+    }
+
+    /**
+     * @return Collection<int, WatchlistAsset>
+     */
+    public function getWatchlistAssets(): Collection
+    {
+        return $this->watchlistAssets;
+    }
+
+    public function addWatchlistAsset(WatchlistAsset $watchlistAsset): static
+    {
+        if (!$this->watchlistAssets->contains($watchlistAsset)) {
+            $this->watchlistAssets->add($watchlistAsset);
+            $watchlistAsset->addAppUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeWatchlistAsset(WatchlistAsset $watchlistAsset): static
+    {
+        if ($this->watchlistAssets->removeElement($watchlistAsset)) {
+            $watchlistAsset->removeAppUser($this);
+        }
+
+        return $this;
     }
 }

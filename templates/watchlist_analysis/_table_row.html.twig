@@ -1,0 +1,8 @@
+<tr> 
+    <td class="font-bold">{{ asset.symbol }}</td>
+    <td>{{ asset.name }}</td>
+    <td>{{ asset.quote }} USD </td>
+    <td class="{{ asset.change > 0 ? 'price-positive' : 'price-negative' }}">
+        {{asset.change > 0 ? '+':''}}{{ asset.change }} %
+    </td>
+</tr>

@@ -1,0 +1,13 @@
+<form action="{{ path('app_watchlist_add') }}" method="POST" id="watchlist-form">
+
+    <div id="api-request-error" class="text-red-500 text-sm mb-2"></div>
+    
+    <label for="symbol" class="formlabel ">Add a new asset to the watchlist:</label>
+    <div class="flex flex-row">
+        <input type="text", name="symbol" placeholder="Enter a symbol" required maxlength="10" class="forminput">
+        <button type="submit" class="btn">
+            +
+        </button>
+    </div>
+    
+</form>
