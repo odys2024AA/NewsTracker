@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Performance{% endblock %}
+
+{% block body %}
+<div class="max-w-6xl mx-auto py-10 space-y-10">
+
+    <h1 class="text-2xl font-bold">Performance</h1>
+
+    {# ── Section 1: latest snapshot per trading place ── #}
+    <section>
+        <h2 class="text-xl font-semibold mb-4">Trading places — latest snapshot</h2>
+        <table class="min-w-full bg-white shadow rounded overflow-hidden">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2 text-left">Place</th>
+                    <th class="px-4 py-2 text-right">Cash</th>
+                    <th class="px-4 py-2 text-right">Tax (lifetime)</th>
+                    <th class="px-4 py-2 text-right">Tax (this year)</th>
+                    <th class="px-4 py-2 text-right">Realized YTD</th>
+                    <th class="px-4 py-2 text-right">Taxable</th>
+                    <th class="px-4 py-2 text-right">Realized total</th>
+                    <th class="px-4 py-2 text-right">Overall</th>
+                    <th class="px-4 py-2"></th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tpp in latestTpps %}
+                <tr class="border-t">
+                    <td class="px-4 py-2">{{ tpp.userTradingPlace.tradingPlace.name }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.cash|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.tax|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.paidTaxCurrentYear|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.realizedEarningsCurrentYear|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.taxableEarnings|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.realizedEarnings|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ tpp.overallEarnings|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">
+                        <a href="{{ path('app_performance_utp_settings', {id: tpp.userTradingPlace.id}) }}"
+                        class="text-blue-600 hover:underline text-sm"> Edit</a>
+                    </td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" class="text-center py-4 text-gray-500">No data yet — run /calcPerformance first.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    {# ── Section 2: latest snapshot per asset ── #}
+    <section>
+        <h2 class="text-xl font-semibold mb-4">Assets — latest snapshot</h2>
+        <table class="min-w-full bg-white shadow rounded overflow-hidden">
+            <thead class="bg-gray-100">
+                <tr>
+                    <th class="px-4 py-2 text-left">Symbol</th>
+                    <th class="px-4 py-2 text-left">Place</th>
+                    <th class="px-4 py-2 text-right">Quantity</th>
+                    <th class="px-4 py-2 text-right">Invested</th>
+                    <th class="px-4 py-2 text-right">Current value</th>
+                    <th class="px-4 py-2 text-right">Realized</th>
+                    <th class="px-4 py-2 text-right">Potential</th>
+                    <th class="px-4 py-2 text-right">Tax allocated</th>
+                    <th class="px-4 py-2 text-right">Overall</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for dp in latestDps %}
+                <tr class="border-t">
+                    <td class="px-4 py-2">{{ dp.userAssetTradingPlace.asset.symbol }}</td>
+                    <td class="px-4 py-2">{{ dp.userAssetTradingPlace.tradingPlace.name }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.leftover|number_format(4) }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.currentlyInvested|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.currentValue|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.realizedEarnings|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.potentialEarnings|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.tax|number_format(2) }}</td>
+                    <td class="px-4 py-2 text-right">{{ dp.overallEarnings|number_format(2) }}</td>
+                </tr>
+                {% else %}
+                <tr><td colspan="9" class="text-center py-4 text-gray-500">No data yet.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </section>
+
+    {# ── Section 3: history chart with dropdowns ── #}
+    <section
+        data-controller="performance-chart"
+        data-performance-chart-utp-metrics-value="{{ utpMetrics|json_encode|e('html_attr') }}"
+        data-performance-chart-uatp-metrics-value="{{ uatpMetrics|json_encode|e('html_attr') }}"
+        data-performance-chart-series-url-value="{{ path('app_performance_series') }}"
+    >
+        <h2 class="text-xl font-semibold mb-4">History chart</h2>
+
+        <div class="flex gap-4 mb-4">
+            <div>
+                <label class="block text-sm font-medium mb-1">Entity</label>
+                <select
+                    data-performance-chart-target="entity"
+                    data-action="change->performance-chart#refresh"
+                    class="border rounded p-2"
+                >
+                    <optgroup label="Trading places">
+                        {% for utp in utps %}
+                            <option value="utp:{{ utp.id }}">{{ utp.tradingPlace.name }}</option>
+                        {% endfor %}
+                    </optgroup>
+                    <optgroup label="Assets">
+                        {% for uatp in uatps %}
+                            <option value="uatp:{{ uatp.id }}">{{ uatp.asset.symbol }} @ {{ uatp.tradingPlace.name }}</option>
+                        {% endfor %}
+                    </optgroup>
+                </select>
+            </div>
+
+            <div>
+                <label class="block text-sm font-medium mb-1">Metric</label>
+                <select
+                    data-performance-chart-target="metric"
+                    data-action="change->performance-chart#refresh"
+                    class="border rounded p-2"
+                >
+                    {# populated by Stimulus on connect/entity change #}
+                </select>
+            </div>
+        </div>
+
+        <div
+            data-performance-chart-target="chart"
+            class="w-full h-96 bg-white shadow rounded"
+        ></div>
+    </section>
+
+    <a href="{{ path('app_transactions') }}"
+    class="text-blue-600 hover:underline text-sm">
+        ← Back to Transactions
+    </a>
+
+</div>
+{% endblock %}

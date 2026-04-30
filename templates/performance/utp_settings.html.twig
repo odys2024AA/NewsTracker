@@ -1,0 +1,108 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings — {{ utp.tradingPlace.name }}{% endblock %}
+
+{% block body %}
+<div class="max-w-2xl mx-auto py-10">
+
+    <a href="{{ path('app_performance') }}" class="text-blue-600 hover:underline text-sm">
+        ← Back to Performance
+    </a>
+
+    <h1 class="text-2xl font-bold mt-2 mb-6">
+        Settings — {{ utp.tradingPlace.name }}
+    </h1>
+
+    {% for message in app.flashes('success') %}
+        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">{{ message }}</div>
+    {% endfor %}
+
+    <div class="bg-white shadow p-6 rounded">
+        {{ form_start(form, { attr: { class: 'space-y-4' } }) }}
+
+            <div>
+                {{ form_label(form.startingCash, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.startingCash, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+                {{ form_help(form.startingCash, { help_attr: { class: 'text-sm text-gray-500 mt-1' } }) }}
+                {{ form_errors(form.startingCash) }}
+            </div>
+
+            <div>
+                {{ form_label(form.taxRate, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.taxRate, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+                {{ form_help(form.taxRate, { help_attr: { class: 'text-sm text-gray-500 mt-1' } }) }}
+                {{ form_errors(form.taxRate) }}
+            </div>
+
+            <div>
+                {{ form_label(form.taxFreePot, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.taxFreePot, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+                {{ form_help(form.taxFreePot, { help_attr: { class: 'text-sm text-gray-500 mt-1' } }) }}
+                {{ form_errors(form.taxFreePot) }}
+            </div>
+
+            <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Save settings
+            </button>
+
+        {{ form_end(form) }}
+    </div>
+
+    <div class="bg-white shadow p-6 rounded mt-6">
+        <h2 class="text-xl font-semibold mb-4">Cash events</h2>
+
+        {% if utp.cashEvents|length > 0 %}
+            <table class="min-w-full mb-6">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-3 py-2 text-left">Date</th>
+                        <th class="px-3 py-2 text-right">Amount</th>
+                        <th class="px-3 py-2 text-left">Description</th>
+                        <th class="px-3 py-2 text-left"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for event in utp.cashEvents |sort((a, b)=> b.date <=> a.date) %}
+                        <tr class="border-t">
+                            <td class="px-3 py-2">{{ event.date|date('Y-m-d') }}</td>
+                            <td class="px-3 py-2 text-right">{{ event.amount|number_format(2) }}</td>
+                            <td class="px-3 py-2">{{ event.description }}</td>
+                            <td class="px-3 py-2 text-right">
+                                <form method="post"
+                                    action="{{ path('app_performance_cash_event_delete', { id: event.id }) }}"
+                                    onsubmit="return confirm('Delete this event?');">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('delete-cash-event-' ~ event.id) }}">
+                                    <button class="text-red-600 hover:underline text-sm">Delete</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <p class="text-gray-500 mb-4">No cash events yet.</p>
+        {% endif %}
+
+        <h3 class="font-medium mb-2">Add cash event</h3>
+        {{ form_start(cashEventForm, { attr: { class: 'space-y-4' } }) }}
+            <div>
+                {{ form_label(cashEventForm.date) }}
+                {{ form_widget(cashEventForm.date, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+            <div>
+                {{ form_label(cashEventForm.amount) }}
+                {{ form_widget(cashEventForm.amount, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+            <div>
+                {{ form_label(cashEventForm.description) }}
+                {{ form_widget(cashEventForm.description, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+            <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Add event
+            </button>
+        {{ form_end(cashEventForm) }}
+    </div>
+
+
+</div>
+{% endblock %}

@@ -42,9 +42,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: WatchlistAsset::class, mappedBy: 'appUsers')]
     private Collection $watchlistAssets;
 
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Transaction::class)]
+    private Collection $transactions;
+
+    /**
+     * @var Collection<int, UserAssetTradingPlace>
+     */
+    #[ORM\OneToMany(targetEntity: UserAssetTradingPlace::class, mappedBy: 'tradingplace_user', orphanRemoval: true)]
+    private Collection $userAssetTradingPlaces;
+
+    /**
+     * @var Collection<int, UserTradingPlace>
+     */
+    #[ORM\OneToMany(targetEntity: UserTradingPlace::class, mappedBy: 'tradingplaceUser', orphanRemoval: true)]
+    private Collection $userTradingPlaces;
+
     public function __construct()
     {
         $this->watchlistAssets = new ArrayCollection();
+        $this->transactions = new ArrayCollection();
+        $this->userAssetTradingPlaces = new ArrayCollection();
+        $this->userTradingPlaces = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -150,6 +168,66 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     {
         if ($this->watchlistAssets->removeElement($watchlistAsset)) {
             $watchlistAsset->removeAppUser($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserAssetTradingPlace>
+     */
+    public function getUserAssetTradingPlaces(): Collection
+    {
+        return $this->userAssetTradingPlaces;
+    }
+
+    public function addUserAssetTradingPlace(UserAssetTradingPlace $userAssetTradingPlace): static
+    {
+        if (!$this->userAssetTradingPlaces->contains($userAssetTradingPlace)) {
+            $this->userAssetTradingPlaces->add($userAssetTradingPlace);
+            $userAssetTradingPlace->setTradingplaceUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserAssetTradingPlace(UserAssetTradingPlace $userAssetTradingPlace): static
+    {
+        if ($this->userAssetTradingPlaces->removeElement($userAssetTradingPlace)) {
+            // set the owning side to null (unless already changed)
+            if ($userAssetTradingPlace->getTradingplaceUser() === $this) {
+                $userAssetTradingPlace->setTradingplaceUser(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, UserTradingPlace>
+     */
+    public function getUserTradingPlaces(): Collection
+    {
+        return $this->userTradingPlaces;
+    }
+
+    public function addUserTradingPlace(UserTradingPlace $userTradingPlace): static
+    {
+        if (!$this->userTradingPlaces->contains($userTradingPlace)) {
+            $this->userTradingPlaces->add($userTradingPlace);
+            $userTradingPlace->setTradingplaceUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUserTradingPlace(UserTradingPlace $userTradingPlace): static
+    {
+        if ($this->userTradingPlaces->removeElement($userTradingPlace)) {
+            // set the owning side to null (unless already changed)
+            if ($userTradingPlace->getTradingplaceUser() === $this) {
+                $userTradingPlace->setTradingplaceUser(null);
+            }
         }
 
         return $this;

@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello TransactionController!{% endblock %}
+
+{% block body %}
+<div class="max-w-5xl mx-auto py-10">
+
+    {# Flash messages #}
+    {% for message in app.flashes('success') %}
+        <div class="mb-4 p-3 bg-green-100 text-green-800 rounded">
+            {{ message }}
+        </div>
+    {% endfor %}
+
+    <a href="{{ path('get_quotes') }}"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Get quotes
+    </a>
+
+    <a href="{{ path('calc_performance') }}"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Calculate Performance
+    </a>
+
+    <a href="{{ path('app_performance') }}"
+    class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+        Performance
+    </a>
+
+    <h1 class="text-2xl font-bold mb-6">Add Transaction</h1>
+
+    <div class="bg-white shadow p-6 rounded mb-10">
+        {{ form_start(form, { attr: { class: 'space-y-4' } }) }}
+
+            <div>
+                {{ form_label(form.symbol, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.symbol, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.asset_type, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.asset_type, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.transaction_type, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.transaction_type, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.date, null, { label_attr: { class: 'block font-medium' } }) }}
+                {{ form_widget(form.date, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    {{ form_label(form.price) }}
+                    {{ form_widget(form.price, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+                </div>
+
+                <div>
+                    {{ form_label(form.quantity) }}
+                    {{ form_widget(form.quantity, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+                </div>
+            </div>
+
+            <div>
+                {{ form_label(form.fee) }}
+                {{ form_widget(form.fee, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+
+            <div>
+                {{ form_label(form.trading_place) }}
+                {{ form_widget(form.trading_place, { attr: { class: 'mt-1 w-full border rounded p-2' } }) }}
+            </div>
+
+            <button class="mt-4 bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">
+                Save Transaction
+            </button>
+
+        {{ form_end(form) }}
+    </div>
+
+    <h2 class="text-xl font-bold mb-4">All Transactions</h2>
+
+    <table class="min-w-full bg-white shadow rounded overflow-hidden">
+        <thead class="bg-gray-100">
+            <tr>
+                <th class="px-4 py-2 text-left">Date</th>
+                <th class="px-4 py-2 text-left">Symbol</th>
+                <th class="px-4 py-2 text-left">Type</th>
+                <th class="px-4 py-2 text-left">Qty</th>
+                <th class="px-4 py-2 text-left">Price</th>
+                <th class="px-4 py-2 text-left">Fee</th>
+                <th class="px-4 py-2 text-left">Place</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for t in transactions %}
+                <tr class="border-t">
+                    <td class="px-4 py-2">{{ t.date|date('Y-m-d H:i') }}</td>
+                    <td class="px-4 py-2">{{ t.asset.symbol }}</td>
+                    <td class="px-4 py-2">{{ t.transactionType }}</td>
+                    <td class="px-4 py-2">{{ t.quantity }}</td>
+                    <td class="px-4 py-2">{{ t.price }}</td>
+                    <td class="px-4 py-2">{{ t.fee }}</td>
+                    <td class="px-4 py-2">{{ t.tradingPlace }}</td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="7" class="px-4 py-4 text-center text-gray-500">
+                        No transactions yet.
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+</div>
+{% endblock %}
